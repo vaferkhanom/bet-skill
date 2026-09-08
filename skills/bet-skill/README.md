@@ -2,7 +2,7 @@
 
 > 18+ only. Education/entertainment only. No strategy guarantees profit. Betting involves risk — only bet where legal and only with money you can afford to lose.
 
-A FULL 1xBet football (soccer) betting skill for AI agents: markets + settlement rules, xG / Poisson / Dixon-Coles / Elo models, value + CLV + Kelly + bankroll, strategies, and the exact websites/tools to use for faster, more accurate match analysis.
+A complete 1xBet betting assistant for AI agents (Hermes + any Agent Skills agent): ALL sports (football, basketball, tennis, cricket, ice hockey, volleyball, MMA, esports), onboarding with YOUR bankroll, staking plans, pre-match/live analysis, daily action lists, bonus pricing, tracking forms, weekly reviews, and weighted expert consensus.
 
 ## Install
 
@@ -31,7 +31,19 @@ Local test: `npx skills add ./bet-skill --skill bet-skill`.
   - `04-websites-toolstack.md`
   - `05-match-analysis-workflow.md`
   - `06-prompts-templates.md`
-- `skills/bet-skill/scripts/` — `poisson.py`, `devig_kelly.py` (stdlib only).
+  - `07-multi-sport-playbooks.md` (basketball/tennis/cricket/hockey/volleyball/MMA/esports)
+  - `08-bankroll-command-center.md` (Bankroll Cards, drawdown ladder)
+  - `09-expert-consensus-sources.md` (source weights, verification rules)
+  - `10-forms-library.md` (onboarding, pre-bet, reviews, bonus pricer)
+- `skills/bet-skill/templates/` — `onboarding.md`, `pre-bet.md`, `weekly-review.md`
+- `skills/bet-skill/scripts/` — `poisson.py`, `devig_kelly.py`, `bankroll_plan.py` (stdlib only).
+
+## Try it
+
+```bash
+python -m py_compile skills/bet-skill/scripts/poisson.py skills/bet-skill/scripts/devig_kelly.py skills/bet-skill/scripts/bankroll_plan.py
+python skills/bet-skill/scripts/bankroll_plan.py --bankroll 1000 --profile standard
+```
 
 ## Verify
 
