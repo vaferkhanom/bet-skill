@@ -200,15 +200,14 @@ Copy-paste prompts + tracker header → `references/06-prompts-templates.md`.
 
 ```bash
 # skills.sh standard (any agent: Claude Code, Codex, Cursor, Copilot, Hermes)
-npx skills add <owner>/bet-skill
-npx skills add <owner>/bet-skill --skill bet-skill
-npx skills add <owner>/bet-skill --list
+npx skills add vaferkhanom/bet-skill
+npx skills add vaferkhanom/bet-skill --skill bet-skill
+npx skills add vaferkhanom/bet-skill --list
 
 # Hermes Agent
-hermes skills install <owner>/bet-skill/skills/bet-skill
-hermes skills tap add <owner>/bet-skill
-/skills install <owner>/bet-skill/skills/bet-skill
+hermes skills install vaferkhanom/bet-skill/skills/bet-skill
+hermes skills tap add vaferkhanom/bet-skill
+/skills install vaferkhanom/bet-skill/skills/bet-skill
 ```
 
-Replace `<owner>` with the GitHub owner after the repo is created.
 Local test: `npx skills add ./bet-skill --skill bet-skill` then `npx skills list`.
