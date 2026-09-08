@@ -78,7 +78,7 @@ Detect sport, load the playbook from `references/07-multi-sport-playbooks.md`, a
 
 | Sport | 1xBet settlement trap | Model with |
 |---|---|---|
-| Football | 90 min ONLY (no ET/pens except To Qualify) | xG/xGA, Poisson/DC λ/μ, Elo, PPDA (→ `references/02-…`) |
+| Football | 90 min ONLY (no ET/pens except To Qualify) | xG/xGA, Poisson/DC λ/μ, Elo, PPDA (see `references/02-quant-models-xg-poisson-elo.md`) |
 | Basketball | **OT INCLUDED** (unless quarter/half market); 40-min game needs 35 min, 48-min needs 40 min to stand | pace, ORtg/DRtg, rest/B2B, injuries to creators |
 | Tennis | retirement = void unless set/market decided; next-point/game live | surface Elo, hold/break %, fatigue, weather (outdoor) |
 | Cricket | format matters (Test/ODI/T20); innings/session markets | venue/par score, toss, weather/DLS, lineup |
@@ -126,7 +126,7 @@ Weekly (30 min): ROI/CLV by league/market, calibration, leak list, plan tweaks, 
 
 ## 6. Forms — create these on demand
 
-From `references/10-forms-library.md` + `templates/`: **Onboarding**, **Pre-Bet Intake** (required before any BET verdict), **Event Report** (the §7 output), **Post-Bet Review**, **Weekly Review**, **Bonus/Promo Pricer**, **Bankroll Card**. Emit as copy-paste markdown or CSV header; pre-fill what you know.
+From `references/10-forms-library.md`, `templates/onboarding.md`, `templates/pre-bet.md`, `templates/weekly-review.md`: **Onboarding**, **Pre-Bet Intake** (required before any BET verdict), **Event Report** (the §7 output), **Post-Bet Review**, **Weekly Review**, **Bonus/Promo Pricer**, **Bankroll Card**. Emit as copy-paste markdown or CSV header; pre-fill what you know.
 
 ## 7. Event Report Template (every analysis)
 
@@ -146,16 +146,16 @@ From `references/10-forms-library.md` + `templates/`: **Onboarding**, **Pre-Bet 
 
 ## Quick References (load on demand)
 
-- `01-1xbet-markets-rules.md` — football settlement bible + slip types + promos
-- `02-quant-models-xg-poisson-elo.md` — formulas, worked example, checklists
-- `03-strategies-bankroll-psychology.md` — per-strategy pros/cons, tilt protocol, scams
-- `04-websites-toolstack.md` — URL table (odds/stats/news/refs/weather)
-- `05-match-analysis-workflow.md` — pipeline + tracker header
-- `06-prompts-templates.md` — one-line calculators + request starters
-- `07-multi-sport-playbooks.md` — non-football settlement + metrics (NEW)
-- `08-bankroll-command-center.md` — Bankroll Cards, ladders, stake tables (NEW)
-- `09-expert-consensus-sources.md` — source weights, verification rules (NEW)
-- `10-forms-library.md` — all fill-in forms (NEW)
+- `references/01-1xbet-markets-rules.md` — football settlement bible + slip types + promos
+- `references/02-quant-models-xg-poisson-elo.md` — formulas, worked example, checklists
+- `references/03-strategies-bankroll-psychology.md` — per-strategy pros/cons, tilt protocol, scams
+- `references/04-websites-toolstack.md` — URL table (odds/stats/news/refs/weather)
+- `references/05-match-analysis-workflow.md` — pipeline + tracker header
+- `references/06-prompts-templates.md` — one-line calculators + request starters
+- `references/07-multi-sport-playbooks.md` — non-football settlement + metrics
+- `references/08-bankroll-command-center.md` — Bankroll Cards, ladders, stake tables
+- `references/09-expert-consensus-sources.md` — source weights, verification rules
+- `references/10-forms-library.md` — all fill-in forms
 
 ## Scripts
 
