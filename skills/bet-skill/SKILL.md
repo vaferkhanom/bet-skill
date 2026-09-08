@@ -1,7 +1,7 @@
 ---
 name: bet-skill
-description: Complete 1xBet betting assistant for ALL sports (football, basketball, tennis, cricket, ice hockey, volleyball, MMA, esports). Onboards with your bankroll, builds staking plans, analyzes events pre-match/live, gives daily action lists, tracks bonuses, reviews history, and weights expert consensus. Use when user asks to analyze any match, set up bankroll, decide what to bet, create tracking forms, or review betting performance.
-version: 2.0.0
+description: Complete 1xBet betting assistant for ALL sports (football incl. men's, women's and youth, basketball, tennis, cricket, ice hockey, volleyball, MMA, esports). Onboards with your bankroll, builds staking plans, analyzes events pre-match AND live (snapshot + time-decay fair odds), gives daily action lists, tracks bonuses, reviews history, and weights expert consensus. Use when user asks to analyze any match (any tier, live or pre-match), set up bankroll, decide what to bet, create tracking forms, or review betting performance.
+version: 2.1.0
 author: bet-skill contributors
 license: MIT
 metadata:
@@ -32,7 +32,8 @@ to review. Works with **Hermes Agent** and the open Agent Skills standard
 | User says | Mode | Do |
 |---|---|---|
 | "I'm new / set me up / I have €X" | **Onboarding** | Run §1 interview, create Bankroll Card + specialist plan |
-| "Analyze [event]" | **Event analysis** | Route by sport (§3), full workflow, output report form |
+| "Analyze [event]" | **Event analysis** | Route by sport (§3) and tier (men/women/youth per `references/12-data-coverage-women-youth.md`), full workflow, output report form |
+| "It's live NOW / minute X" | **Live mode** | Demand the 30-sec snapshot (`templates/live-snapshot.md`), fetch via Tier 1-3 (`references/11-live-games-protocol.md`), price with `scripts/live_fair.py`, need ≥5pp edge, 0.5-1% max |
 | "What should I do today?" | **Daily briefing** | Run §5 checklist, produce action list |
 | "Should I bet this?" + odds | **Bet decision** | De-vig → edge/EV → Kelly-capped stake → BET/NO BET + 3 counters |
 | "Review my bets / my week" | **Review** | Score process (CLV, discipline), find leaks, update plan |
@@ -78,7 +79,7 @@ Detect sport, load the playbook from `references/07-multi-sport-playbooks.md`, a
 
 | Sport | 1xBet settlement trap | Model with |
 |---|---|---|
-| Football | 90 min ONLY (no ET/pens except To Qualify) | xG/xGA, Poisson/DC λ/μ, Elo, PPDA (see `references/02-quant-models-xg-poisson-elo.md`) |
+| Football (men, women, youth — all tiers) | 90 min ONLY (no ET/pens except To Qualify) | xG/xGA, Poisson/DC λ/μ, Elo, PPDA (see `references/02-quant-models-xg-poisson-elo.md`); tier rules, no-xG fallbacks and edge bars in `references/12-data-coverage-women-youth.md` |
 | Basketball | **OT INCLUDED** (unless quarter/half market); 40-min game needs 35 min, 48-min needs 40 min to stand | pace, ORtg/DRtg, rest/B2B, injuries to creators |
 | Tennis | retirement = void unless set/market decided; next-point/game live | surface Elo, hold/break %, fatigue, weather (outdoor) |
 | Cricket | format matters (Test/ODI/T20); innings/session markets | venue/par score, toss, weather/DLS, lineup |
@@ -126,7 +127,7 @@ Weekly (30 min): ROI/CLV by league/market, calibration, leak list, plan tweaks, 
 
 ## 6. Forms — create these on demand
 
-From `references/10-forms-library.md`, `templates/onboarding.md`, `templates/pre-bet.md`, `templates/weekly-review.md`: **Onboarding**, **Pre-Bet Intake** (required before any BET verdict), **Event Report** (the §7 output), **Post-Bet Review**, **Weekly Review**, **Bonus/Promo Pricer**, **Bankroll Card**. Emit as copy-paste markdown or CSV header; pre-fill what you know.
+From `references/10-forms-library.md`, `templates/onboarding.md`, `templates/pre-bet.md`, `templates/weekly-review.md`, `templates/live-snapshot.md`: **Onboarding**, **Pre-Bet Intake** (required before any BET verdict), **Event Report** (the §7 output), **Post-Bet Review**, **Weekly Review**, **Bonus/Promo Pricer**, **Bankroll Card**. Emit as copy-paste markdown or CSV header; pre-fill what you know.
 
 ## 7. Event Report Template (every analysis)
 
@@ -156,22 +157,26 @@ From `references/10-forms-library.md`, `templates/onboarding.md`, `templates/pre
 - `references/08-bankroll-command-center.md` — Bankroll Cards, ladders, stake tables
 - `references/09-expert-consensus-sources.md` — source weights, verification rules
 - `references/10-forms-library.md` — all fill-in forms
+- `references/11-live-games-protocol.md` — live data tiers, live pipeline, suspension rules
+- `references/12-data-coverage-women-youth.md` — coverage table, no-xG fallbacks, tier edge bars
 
 ## Scripts
 
 - `scripts/poisson.py --home 2.06 --away 0.86 --rho -0.08` — football scoreline matrix
 - `scripts/devig_kelly.py --odds 1.95,3.60,4.20 --model 0.55` — devig/EV/Kelly/CLV/acca-margin
-- `scripts/bankroll_plan.py --bankroll 1000 --profile standard` — unit/stops/ladder (NEW)
+- `scripts/bankroll_plan.py --bankroll 1000 --profile standard` — unit/stops/ladder
+- `scripts/live_fair.py --lh 1.8 --la 1.1 --minute 65 --home-score 0 --away-score 0 --line 2.5 --market over --odds 2.10` — live-fair baseline + EV (NEW)
 
 ## Verification (before answering)
 
 - [ ] Bankroll Card active (or PROVISIONAL marked)? Stake as % with cap?
-- [ ] Sport routed right + settlement basis stated (90-min vs OT vs retirement)?
-- [ ] Model% vs no-vig% vs edge/EV + safety margin (≥3-5pp)?
+- [ ] Sport + tier routed right (men/women/youth) + settlement basis stated (90-min vs OT vs retirement)?
+- [ ] Model% vs no-vig% vs edge/EV + safety margin (≥3-5pp pre-match, ≥5pp live, ≥6-8pp youth/obscure)?
 - [ ] Sharp agreement checked (Pinnacle/Exchange/dropping) + expert weight honest?
-- [ ] XI/news/rest/motivation/ref-weather per sport checked or [N/A]?
+- [ ] XI/news/rest/motivation/ref-weather per sport checked or [N/A]? No-xG fallback stated where applicable?
+- [ ] Live: snapshot (minute+score+cards+re-quoted odds) present? Momentum (box entries, not possession) confirmed? ≤2 live bets, 0.5-1%?
 - [ ] 3 counters + invalidation + explicit passes listed?
-- [ ] Log row + CLV target provided? Stop-loss respected?
+- [ ] Log row (+ Tier column) + CLV target provided? Stop-loss respected?
 - [ ] No "guaranteed/fixed/safe", 18+/risk line included?
 
 ## Install
