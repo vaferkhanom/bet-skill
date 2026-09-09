@@ -37,15 +37,17 @@ Local test: `npx skills add ./bet-skill --skill bet-skill`.
   - `10-forms-library.md` (onboarding, pre-bet, reviews, bonus pricer)
   - `11-live-games-protocol.md` (live data tiers, pipeline, suspension rules)
   - `12-data-coverage-women-youth.md` (women's + youth/age-group tiers, no-xG fallbacks, edge bars)
+  - `13-1xbet-all-markets-catalog.md` (EVERY football market + slip type with official-rules §-citations)
+  - `14-market-softness-pricing-playbook.md` (margin tiers, where value hides, pricing any market)
 - `skills/bet-skill/templates/` — `onboarding.md`, `pre-bet.md`, `weekly-review.md`, `live-snapshot.md`
-- `skills/bet-skill/scripts/` — `poisson.py`, `devig_kelly.py`, `bankroll_plan.py`, `live_fair.py` (stdlib only).
+- `skills/bet-skill/scripts/` — `poisson.py` (core + `--full` market board), `devig_kelly.py`, `bankroll_plan.py`, `live_fair.py` (stdlib only).
 
 ## Try it
 
 ```bash
 python -m py_compile skills/bet-skill/scripts/poisson.py skills/bet-skill/scripts/devig_kelly.py skills/bet-skill/scripts/bankroll_plan.py skills/bet-skill/scripts/live_fair.py
 python skills/bet-skill/scripts/bankroll_plan.py --bankroll 1000 --profile standard
-python skills/bet-skill/scripts/poisson.py --home 2.06 --away 0.86 --rho -0.08
+python skills/bet-skill/scripts/poisson.py --home 2.06 --away 0.86 --full
 python skills/bet-skill/scripts/devig_kelly.py --odds 1.95,3.60,4.20 --model 0.55
 python skills/bet-skill/scripts/live_fair.py --lh 1.8 --la 1.1 --minute 65 --home-score 0 --away-score 0 --line 1.5 --market over --odds 2.10
 ```

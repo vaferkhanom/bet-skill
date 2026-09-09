@@ -1,7 +1,7 @@
 ---
 name: bet-skill
 description: Complete 1xBet betting assistant for ALL sports (football incl. men's, women's and youth, basketball, tennis, cricket, ice hockey, volleyball, MMA, esports). Onboards with your bankroll, builds staking plans, analyzes events pre-match AND live (snapshot + time-decay fair odds), gives daily action lists, tracks bonuses, reviews history, and weights expert consensus. Use when user asks to analyze any match (any tier, live or pre-match), set up bankroll, decide what to bet, create tracking forms, or review betting performance.
-version: 2.1.0
+version: 2.2.0
 author: bet-skill contributors
 license: MIT
 metadata:
@@ -159,18 +159,26 @@ From `references/10-forms-library.md`, `templates/onboarding.md`, `templates/pre
 - `references/10-forms-library.md` — all fill-in forms
 - `references/11-live-games-protocol.md` — live data tiers, live pipeline, suspension rules
 - `references/12-data-coverage-women-youth.md` — coverage table, no-xG fallbacks, tier edge bars
+- `references/13-1xbet-all-markets-catalog.md` — EVERY football market on 1xBet with official-rules citations (§-numbers from the 260-page rules PDF): all groups (Popular/1X2/Total/Handicap/Goals/Players/Halves/Corners/Cards/Specials/Statistics/Intervals), all bet-slip types (Single→Patent, Advancebet, Edit Bet, Powerbet, Constructor both senses, TOTO), and the settlement matrix (own goals, corner-taken, cards-after-FT, 80-minute rule, interval stoppage conventions)
+- `references/14-market-softness-pricing-playbook.md` — which of the 1,400+ to bet: margin softness ladder (Tier 1 tight → Tier 5 farm), where value hides (derivative-vs-mainline arbitrage, refs/cards, corners/style), pricing ANY market from one Poisson matrix, combo correlation trap, exotic pre-bet gate
+
+## Market selection rule (all 1,400+ enumerated in `references/13-1xbet-all-markets-catalog.md`)
+
+Before suggesting ANY market: state its Tier (1-5) from `references/14-market-softness-pricing-playbook.md`, its settlement nuance from `references/13-1xbet-all-markets-catalog.md`, and price it via `scripts/poisson.py --full` (or own-lambda Poisson for corners/cards/stats). Tier 3 needs ≥5pp edge, Tier 4 ≥6pp, Tier 5 ≥8pp + gate checklist. If the market isn't derivable (e.g. referee duels, First To Happen) → say so and default NO BET.
 
 ## Scripts
 
-- `scripts/poisson.py --home 2.06 --away 0.86 --rho -0.08` — football scoreline matrix
+- `scripts/poisson.py --home 2.06 --away 0.86 --rho -0.08` — football scoreline matrix (core board)
+- `scripts/poisson.py --home 2.06 --away 0.86 --full` — prices EVERY derivable family from one matrix: 1X2/DC/DNB/2UP-note, win-to-nil/clean-sheets, O/U all lines + Asian Totals + 3-way, team totals, BTTS + combos (correlated joint), Multi Goal bands, Odd/Even, first-goal/race-to-N, halves + highest-scoring-half + win-both, HT/FT 9 combos, full Asian Handicap ladder with push rows + fair odds, exact scores
 - `scripts/devig_kelly.py --odds 1.95,3.60,4.20 --model 0.55` — devig/EV/Kelly/CLV/acca-margin
 - `scripts/bankroll_plan.py --bankroll 1000 --profile standard` — unit/stops/ladder
-- `scripts/live_fair.py --lh 1.8 --la 1.1 --minute 65 --home-score 0 --away-score 0 --line 2.5 --market over --odds 2.10` — live-fair baseline + EV (NEW)
+- `scripts/live_fair.py --lh 1.8 --la 1.1 --minute 65 --home-score 0 --away-score 0 --line 2.5 --market over --odds 2.10` — live-fair baseline + EV
 
 ## Verification (before answering)
 
 - [ ] Bankroll Card active (or PROVISIONAL marked)? Stake as % with cap?
 - [ ] Sport + tier routed right (men/women/youth) + settlement basis stated (90-min vs OT vs retirement)?
+- [ ] Market named with 1xBet notation, Tier (1-5) + settlement nuance cited (13/14 catalog + playbook)? Exotic gate passed for Tier 4-5?
 - [ ] Model% vs no-vig% vs edge/EV + safety margin (≥3-5pp pre-match, ≥5pp live, ≥6-8pp youth/obscure)?
 - [ ] Sharp agreement checked (Pinnacle/Exchange/dropping) + expert weight honest?
 - [ ] XI/news/rest/motivation/ref-weather per sport checked or [N/A]? No-xG fallback stated where applicable?
